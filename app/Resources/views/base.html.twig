@@ -1,0 +1,60 @@
+{# Template de Base #}
+<!DOCTYPE html>
+
+<html lang="{{ app.request.locale }}">
+
+{# Block Header (Méta, css, etc) #}
+{% block header %}
+
+    {% embed "include/header.html.twig" %}{% endembed %}
+
+{% endblock header %}
+
+<body class="{% block body_class %}{% endblock %}">
+
+{# Navigation Globale #}
+{% block navigation %}
+
+    <header>
+
+        {% embed "include/navigation.html.twig" %}{% endembed %}
+
+    </header>
+
+{% endblock navigation %}
+
+<main>
+    {# Fil d'ariane #}
+    {% block fil_ariane %}
+
+        {% embed "include/fil-ariane.html.twig" %}{% endembed %}
+
+    {% endblock fil_ariane %}
+
+    {# Corps du document #}
+    {% block content %}{% endblock content %}
+
+</main>
+
+{# Pied de page #}
+<footer>
+
+    {% block footer %}
+
+        {% embed "include/footer.html.twig" %}{% endembed %}
+
+    {% endblock footer %}
+
+</footer>
+
+{# Javascripts #}
+{% block javascripts %}
+
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+
+{% endblock javascripts %}
+
+</body>
+
+</html>
