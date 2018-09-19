@@ -55,3 +55,6 @@ bfg.jar
 .idea/*
 /bdd/*
 .dropbox
+.idea/
+var/cache/
+vendor/
