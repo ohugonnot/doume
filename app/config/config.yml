@@ -27,7 +27,8 @@ framework:
     http_method_override: true
     templating:
         engines: ['twig']
-    assets: ~
+    assets:
+        json_manifest_path: '%kernel.project_dir%/web/build/manifest.json'
     php_errors:
         log: true
 

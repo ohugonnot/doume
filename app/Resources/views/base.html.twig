@@ -32,7 +32,19 @@
     {% endblock fil_ariane %}
 
     {# Corps du document #}
-    {% block content %}{% endblock content %}
+    <div id="app">
+    {% block content %}
+
+        <div class="text-center">
+            <h3>Monnaie locale : Doumes</h3>
+
+            <div class="jumbotron text-center">
+                <example></example>
+            </div>
+        </div>
+
+    {% endblock content %}
+    </div>
 
 </main>
 
@@ -52,6 +64,8 @@
 
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
     <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+    <script src="{{ asset('build/manifest.js') }}"></script>
+    <script src="{{ asset('build/app.js') }}"></script>
 
 {% endblock javascripts %}
 
