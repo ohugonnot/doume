@@ -1,6 +1,5 @@
 'use strict';
 
-
 import $ from 'jquery';
 global.$ = $;
 import Popper from 'popper.js';
@@ -16,6 +15,7 @@ import 'bootstrap';
 import '../css/app.scss';
 
 new Vue({
+    delimiters: ['[[', ']]'],
     el: '#app',
     components: {Example}
 });
