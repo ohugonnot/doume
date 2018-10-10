@@ -33,3 +33,16 @@ services:
     # AppBundle\Service\ExampleService:
     #     arguments:
     #         $someArgument: 'some_value'
+
+    JMS\TranslationBundle\Controller\TranslateController:
+        public: true
+        arguments:
+            $configFactory: '@jms_translation.config_factory'
+            $loader: '@jms_translation.loader_manager'
+
+
+    JMS\TranslationBundle\Controller\ApiController:
+        public: true
+        arguments:
+            $configFactory: '@jms_translation.config_factory'
+            $updater: '@jms_translation.updater'

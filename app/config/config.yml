@@ -120,6 +120,16 @@ fos_user:
       address: "%mailer_user%"
       sender_name: "%mailer_user%"
 
+jms_translation:
+  configs:
+    app:
+      dirs: ["%kernel.root_dir%", "%kernel.root_dir%/../src"]
+      output_dir: "%kernel.root_dir%/Resources/translations"
+      ignored_domains: []
+      excluded_names: []
+      excluded_dirs: [assets, bin, scripts, tasks, tests, var]
+      extractors: []
+
 jms_i18n_routing:
     default_locale: fr
     locales: [fr, en]
