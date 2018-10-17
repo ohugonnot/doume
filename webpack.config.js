@@ -1,4 +1,5 @@
 var Encore = require('@symfony/webpack-encore');
+var webpack = require('webpack');
 
 Encore
     // directory where compiled assets will be stored
@@ -23,6 +24,9 @@ Encore
 
     // uncomment if you use TypeScript
     //.enableTypeScriptLoader()
+    // provide jquery for select2 and other lib need global Jquery
+    .addPlugin(new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/))
+    .autoProvidejQuery()
     .enableVueLoader()
     .enableSassLoader()
     .enableSourceMaps(!Encore.isProduction())
