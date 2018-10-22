@@ -1,8 +1,7 @@
-{# Template de Base #}
+{# Template de Base // lang = {{ app.request.locale }} #}
 <!DOCTYPE html>
-
-<html lang="{{ app.request.locale }}">
-
+<html lang="fr">
+<title>{% block seo_title %} - Solution alternative {% endblock seo_title %}</title>
 {# Block Header (Méta, css, etc) #}
 {% block header %}
 
@@ -30,13 +29,29 @@
         {% embed "include/fil-ariane.html.twig" %}{% endembed %}
 
     {% endblock fil_ariane %}
-
+{{ dump() }}
     {# Corps du document #}
+    {% if is_granted('ROLE_ADMIN') %}
+        Bonjour user {{ app.user.username }} vous êtes admin.<br>
+        Votre dernière connexion remonte à {{ app.user.lastLogin|date }}
+    {% endif %}
+
+    {% if users is defined %}
+        <ul>
+            {% for user in users  %}
+                <li>{{ user.username }} - {{ user.email }}</li>
+
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+
+
     <div id="app">
     {% block content %}
 
         <div class="text-center">
-            <h3>Monnaie locale : Doumes</h3>
+            <h3>Solution alternative !</h3>
 
             <div class="jumbotron text-center">
                 <example></example>
