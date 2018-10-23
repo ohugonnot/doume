@@ -62,7 +62,7 @@ doctrine:
                 dql:
                     datetime_functions:
                         date: DoctrineExtensions\Query\Mysql\Date
-                        date_format: DoctrineExtensions\Query\Mysql\DateFormat  
+                        date_format: DoctrineExtensions\Query\Mysql\DateFormat
                         MONTH: DoctrineExtensions\Query\Mysql\Month
                         YEAR: DoctrineExtensions\Query\Mysql\Year
                         DAY: DoctrineExtensions\Query\Mysql\Day
@@ -111,11 +111,15 @@ sensio_framework_extra:
 
 stof_doctrine_extensions:
     default_locale: fr_FR
-
+    orm:
+        default: ~
+        
 fos_user:
     db_driver: orm # other valid values are 'mongodb' and 'couchdb'
     firewall_name: main
     user_class: AppBundle\Entity\User
+    group:
+        group_class: AppBundle\Entity\Groupe
     from_email:
       address: "%mailer_user%"
       sender_name: "%mailer_user%"
