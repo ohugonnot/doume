@@ -1,0 +1,6 @@
+AppBundle\Entity\User:
+    character{1..10}:
+        username: <userName()>
+        email: <email()>
+        plainPassword: 'test'
+        enabled: true
