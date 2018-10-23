@@ -1,16 +1,15 @@
 <?php
-// src/AppBundle/Entity/Groupe.php
+// src/AppBundle/Entity/Siege.php
 
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use FOS\UserBundle\Model\Group as BaseGroup;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="groupe")
+ * @ORM\Table(name="siege")
  */
-class Groupe extends BaseGroup
+class Siege
 {
     /**
      * @ORM\Id
@@ -40,7 +39,7 @@ class Groupe extends BaseGroup
 
     /**
      * @param mixed $nom
-     * @return Groupe
+     * @return Siege
      */
     public function setNom($nom)
     {
@@ -58,7 +57,7 @@ class Groupe extends BaseGroup
 
     /**
      * @param mixed $compte
-     * @return Groupe
+     * @return Siege
      */
     public function setCompte($compte)
     {
