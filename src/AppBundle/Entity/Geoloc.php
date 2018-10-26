@@ -6,6 +6,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * QUESTION nullable
  * @ORM\Entity
  * @ORM\Table(name="geoloc")
  */
@@ -13,6 +14,8 @@ class Geoloc
 {
 
     /**
+	 * @var int
+	 *
      * @ORM\Id
      * @ORM\Column(name="id", type="integer")
      * @ORM\GeneratedValue
@@ -20,89 +23,136 @@ class Geoloc
     protected $id;
 
     /**
-     * @ORM\Column(name="adresse", type="string", length=255)
-     */
+	 * @var null|string
+	 *
+     * @ORM\Column(name="adresse", type="string", length=255, nullable=true)
+*/
     private $adresse;
 
-    /**
-     * @ORM\Column(name="lat", type="decimal", precision=10, scale=7)
-     */
-    private $lat;
+	/**
+	 * @var null|int
+	 *
+	 * @ORM\Column(name="cpostal", type="integer", length=5, nullable=true)
+	 */
+	private $cpostal;
 
-    /**
-     * @ORM\Column(name="lon", type="decimal", precision=10, scale=7)
-     */
-    private $lon;
+	/**
+	 * @var null|string
+	 *
+	 * @ORM\Column(name="ville", type="string", length=100, nullable=true)
+	 */
+	private $ville;
 
-    /**
-     * @return mixed
-     */
-    public function getId()
+	/**
+	 * @var null|float
+	 *
+	 * @ORM\Column(name="lat", type="decimal", precision=10, scale=7, nullable=true)
+	 */
+	private $lat;
+
+	/**
+	 * @var null|float
+	 *
+	 * @ORM\Column(name="lon", type="decimal", precision=10, scale=7, nullable=true)
+	 */
+	private $lon;
+
+
+	/**
+	 * @return int
+	 */
+	public function getId(): int
     {
         return $this->id;
     }
 
+	/**
+	 * @return null|string
+	 */
+	public function getAdresse(): ?string
+	{
+		return $this->adresse;
+	}
 
-    /**
-     *  j'ai mis des OneToOne a Comptoir, Amap, Marché et Prestataire
-     * à revoir ?
-     *
-     */
+	/**
+	 * @param null|string $adresse
+	 * @return Geoloc
+	 */
+	public function setAdresse(?string $adresse)
+	{
+		$this->adresse = $adresse;
+		return $this;
+	}
 
+	/**
+	 * @return int|null
+	 */
+	public function getCpostal(): ?int
+	{
+		return $this->cpostal;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getAdresse()
-    {
-        return $this->adresse;
-    }
+	/**
+	 * @param int|null $cpostal
+	 * @return Geoloc
+	 */
+	public function setCpostal(?int $cpostal)
+	{
+		$this->cpostal = $cpostal;
+		return $this;
+	}
 
-    /**
-     * @param mixed $adresse
-     * @return Geoloc
-     */
-    public function setAdresse($adresse)
-    {
-        $this->adresse = $adresse;
-        return $this;
-    }
+	/**
+	 * @return null|string
+	 */
+	public function getVille(): ?string
+	{
+		return $this->ville;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getLat()
-    {
-        return $this->lat;
-    }
+	/**
+	 * @param null|string $ville
+	 * @return Geoloc
+	 */
+	public function setVille(?string $ville)
+	{
+		$this->ville = $ville;
+		return $this;
+	}
 
-    /**
-     * @param mixed $lat
-     * @return Geoloc
-     */
-    public function setLat($lat)
-    {
-        $this->lat = $lat;
-        return $this;
-    }
+	/**
+	 * @return float|null
+	 */
+	public function getLat(): ?float
+	{
+		return $this->lat;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getLon()
-    {
-        return $this->lon;
-    }
+	/**
+	 * @param float|null $lat
+	 * @return Geoloc
+	 */
+	public function setLat(?float $lat)
+	{
+		$this->lat = $lat;
+		return $this;
+	}
 
-    /**
-     * @param mixed $lon
-     * @return Geoloc
-     */
-    public function setLon($lon)
-    {
-        $this->lon = $lon;
-        return $this;
-    }
+	/**
+	 * @return float|null
+	 */
+	public function getLon(): ?float
+	{
+		return $this->lon;
+	}
 
-
+	/**
+	 * @param float|null $lon
+	 * @return Geoloc
+	 */
+	public function setLon(?float $lon)
+	{
+		$this->lon = $lon;
+		return $this;
+	}
 }

@@ -3,192 +3,94 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Entity\EntityTrait\EnablableEntityTrait;
+use AppBundle\Entity\EntityTrait\NameSlugContentEntityTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 
 /**
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks()
  * @ORM\Table(name="news")
  */
 class News
 {
+	use TimestampableEntity, NameSlugContentEntityTrait, EnablableEntityTrait;
+
     /**
-     * @ORM\Id
+	 * @var int
+	 *
+	 * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
 
+	/**
+	 * @var null|Fichier
+	 *
+	 * @Assert\Valid()
+	 * @ORM\OneToOne(targetEntity="Fichier", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
+	 */
+	protected $fichier;
+
+	/**
+	 * @var User
+	 *
+	 * @ORM\ManyToOne(targetEntity="User", inversedBy="news")
+	 * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
+	 */
+	private $user;
 
     /**
-     * @ORM\Column(name="created_at", type="date")
-     */
-    private $createdAt;
-
-    /**
-     * @ORM\Column(name="enabled", type="boolean", nullable=false)
-     */
-    private $enabled;
-
-    /**
-     * @ORM\Column(name="titre", type="string", length=255)
-     */
-    private $titre;
-
-    /**
-     * @ORM\Column(name="texte", type="text")
-     */
-    private $texte;
-
-    /**
-     * @ORM\Column(name="fichier", type="string", length=255)
-     */
-    private $fichier;
-
-    /**
-     * @ORM\Column(name="auteur", type="string", length=255)
-     */
-    private $auteur;
-
-    /**
+	 * QUESTION
      * @ORM\Column(name="groupe", type="string", length=255)
      */
     private $groupe;
 
-    /**
-     * @return mixed
-     */
-    public function getId()
+
+	/**
+	 * @return int
+	 */
+	public function getId(): int
     {
         return $this->id;
     }
 
+	/**
+	 * @param User $user
+	 * @return $this
+	 */
+	public function setuser(User $user)
+	{
+		$this->user = $user;
+		return $this;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
+	/**
+	 * @return User
+	 */
+	public function getuser(): User
+	{
+		return $this->user;
+	}
 
-    /**
-     * @param mixed $createdAt
-     * @return News
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-        return $this;
-    }
+	/**
+	 * @return Fichier|null
+	 */
+	public function getFichier(): ?Fichier
+	{
+		return $this->fichier;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getEnabled()
-    {
-        return $this->enabled;
-    }
-
-    /**
-     * @param mixed $enabled
-     * @return News
-     */
-    public function setEnabled($enabled)
-    {
-        $this->enabled = $enabled;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTitre()
-    {
-        return $this->titre;
-    }
-
-    /**
-     * @param mixed $titre
-     * @return News
-     */
-    public function setTitre($titre)
-    {
-        $this->titre = $titre;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTexte()
-    {
-        return $this->texte;
-    }
-
-    /**
-     * @param mixed $texte
-     * @return News
-     */
-    public function setTexte($texte)
-    {
-        $this->texte = $texte;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getFichier()
-    {
-        return $this->fichier;
-    }
-
-    /**
-     * @param mixed $fichier
-     * @return News
-     */
-    public function setFichier($fichier)
-    {
-        $this->fichier = $fichier;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAuteur()
-    {
-        return $this->auteur;
-    }
-
-    /**
-     * @param mixed $auteur
-     * @return News
-     */
-    public function setAuteur($auteur)
-    {
-        $this->auteur = $auteur;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getGroupe()
-    {
-        return $this->groupe;
-    }
-
-    /**
-     * @param mixed $groupe
-     * @return News
-     */
-    public function setGroupe($groupe)
-    {
-        $this->groupe = $groupe;
-        return $this;
-    }
-
-
+	/**
+	 * @param Fichier|null $fichier
+	 * @return News
+	 */
+	public function setFichier(?Fichier $fichier)
+	{
+		$this->fichier = $fichier;
+		return $this;
+	}
 }

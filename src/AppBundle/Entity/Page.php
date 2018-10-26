@@ -3,7 +3,10 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Entity\EntityTrait\EnablableEntityTrait;
+use AppBundle\Entity\EntityTrait\NameSlugContentEntityTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * @ORM\Entity
@@ -11,7 +14,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Page
 {
+	use NameSlugContentEntityTrait, TimestampableEntity, EnablableEntityTrait;
+
     /**
+	 * @var int
+	 *
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
@@ -19,178 +26,137 @@ class Page
     protected $id;
 
     /**
-     * @ORM\Column(name="url", type="string", length=30)
-     */
-    private $url;
-
-    /**
-     * @ORM\Column(name="js", type="string", length=255)
+	 * @var null|string
+	 *
+     * @ORM\Column(name="js", type="text", nullable=true)
      */
     private $js;
 
-    /**
-     * @ORM\Column(name="css", type="string", length=255)
+	/**
+	 * @var null|string
+	 *
+	 * @ORM\Column(name="css", type="text", nullable=true)
      */
     private $css;
 
-    /**
-     * @ORM\Column(name="titre", type="string", length=255)
+	/**
+	 * @var null|string
+	 *
+	 * @ORM\Column(name="description", type="string", length=255, nullable=true)
      */
-    private $titre;
+    private $metaDescription;
+
+	/**
+	 * @var null|string
+	 *
+     * @ORM\Column(name="tag", type="string", length=255, nullable=true)
+     */
+    private $metaTags;
+
+	/**
+	 * @var null|string
+	 *
+	 * @ORM\Column(name="template", type="string", length=255, nullable=true)
+	 */
+	private $template;
 
     /**
-     * @ORM\Column(name="description", type="string", length=255)
-     */
-    private $description;
-
-    /**
-     * @ORM\Column(name="tag", type="string", length=255)
-     */
-    private $tag;
-
-    /**
-     * @ORM\Column(name="texte", type="text")
-     */
-    private $texte;
-    /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", cascade={"persist"}, inversedBy="pages")
-     * @ORM\JoinColumn(nullable=false)
+	 * @var User
+	 *
+     * @ORM\ManyToOne(targetEntity="User", cascade={"persist"}, inversedBy="pages")
+	 * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
     private $user;
 
-    /**
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
+	/**
+	 * @return null|string
+	 */
+	public function getJs(): ?string
+	{
+		return $this->js;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getUrl()
-    {
-        return $this->url;
-    }
+	/**
+	 * @param null|string $js
+	 * @return Page
+	 */
+	public function setJs(?string $js)
+	{
+		$this->js = $js;
+		return $this;
+	}
 
-    /**
-     * @param mixed $url
-     * @return Page
-     */
-    public function setUrl($url)
-    {
-        $this->url = $url;
-        return $this;
-    }
+	/**
+	 * @return null|string
+	 */
+	public function getCss(): ?string
+	{
+		return $this->css;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getTitre()
-    {
-        return $this->titre;
-    }
+	/**
+	 * @param null|string $css
+	 * @return Page
+	 */
+	public function setCss(?string $css)
+	{
+		$this->css = $css;
+		return $this;
+	}
 
-    /**
-     * @param mixed $titre
-     * @return Page
-     */
-    public function setTitre($titre)
-    {
-        $this->titre = $titre;
-        return $this;
-    }
+	/**
+	 * @return null|string
+	 */
+	public function getMetaDescription(): ?string
+	{
+		return $this->metaDescription;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
+	/**
+	 * @param null|string $metaDescription
+	 * @return Page
+	 */
+	public function setMetaDescription(?string $metaDescription)
+	{
+		$this->metaDescription = $metaDescription;
+		return $this;
+	}
 
-    /**
-     * @param mixed $description
-     * @return Page
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-        return $this;
-    }
+	/**
+	 * @return null|string
+	 */
+	public function getMetaTags(): ?string
+	{
+		return $this->metaTags;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getTag()
-    {
-        return $this->tag;
-    }
+	/**
+	 * @param null|string $metaTags
+	 * @return Page
+	 */
+	public function setMetaTags(?string $metaTags)
+	{
+		$this->metaTags = $metaTags;
+		return $this;
+	}
 
-    /**
-     * @param mixed $tag
-     * @return Page
-     */
-    public function setTag($tag)
-    {
-        $this->tag = $tag;
-        return $this;
-    }
+	/**
+	 * @return null|string
+	 */
+	public function getTemplate(): ?string
+	{
+		return $this->template;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getTexte()
-    {
-        return $this->texte;
-    }
-
-    /**
-     * @param mixed $texte
-     * @return Page
-     */
-    public function setTexte($texte)
-    {
-        $this->texte = $texte;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getJs()
-    {
-        return $this->js;
-    }
-
-    /**
-     * @param mixed $js
-     * @return Page
-     */
-    public function setJs($js)
-    {
-        $this->js = $js;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCss()
-    {
-        return $this->css;
-    }
-
-    /**
-     * @param mixed $css
-     * @return Page
-     */
-    public function setCss($css)
-    {
-        $this->css = $css;
-        return $this;
-    }
+	/**
+	 * @param null|string $template
+	 * @return Page
+	 */
+	public function setTemplate(?string $template)
+	{
+		$this->template = $template;
+		return $this;
+	}
 
     /**
      * @return User
@@ -204,11 +170,9 @@ class Page
      * @param User $user
      * @return Page
      */
-    public function setUser(User $user): Page
+    public function setUser(User $user)
     {
         $this->user = $user;
         return $this;
     }
-
-
 }

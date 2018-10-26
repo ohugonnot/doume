@@ -1,100 +1,57 @@
 <?php
-// src/AppBundle/Entity/Aideadmin.php
 
 namespace AppBundle\Entity;
 
+use AppBundle\Entity\EntityTrait\NameSlugContentEntityTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="aideadmin")
+ * @ORM\Table(name="aide_admin")
  */
-class Aideadmin
+class AideAdmin
 {
+	use NameSlugContentEntityTrait;
+
     /**
+	 * @var int
+	 *
      * @ORM\Id
      * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue
+	 * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
 
     /**
-     * @ORM\Column(name="url", type="string", length=100)
+	 * @var string
+	 *
+     * @ORM\Column(name="route", type="string", length=100, nullable=true)
      */
-    private $url;
+    private $route;
 
-    /**
-     * @ORM\Column(name="titre", type="string", length=255)
-     */
-    private $titre;
-
-    /**
-     * @ORM\Column(name="texte", type="text")
-     */
-    private $texte;
-
-    /**
-     * @return mixed
-     */
-    public function getId()
+	/**
+	 * @return int
+	 */
+	public function getId(): int
     {
         return $this->id;
     }
 
+	/**
+	 * @return string
+	 */
+	public function getRoute(): string
+	{
+		return $this->route;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getUrl()
-    {
-        return $this->url;
-    }
-
-    /**
-     * @param mixed $url
-     * @return Aideadmin
-     */
-    public function setUrl($url)
-    {
-        $this->url = $url;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTitre()
-    {
-        return $this->titre;
-    }
-
-    /**
-     * @param mixed $titre
-     * @return Aideadmin
-     */
-    public function setTitre($titre)
-    {
-        $this->titre = $titre;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTexte()
-    {
-        return $this->texte;
-    }
-
-    /**
-     * @param mixed $texte
-     * @return Aideadmin
-     */
-    public function setTexte($texte)
-    {
-        $this->texte = $texte;
-        return $this;
-    }
-
-
+	/**
+	 * @param string $route
+	 * @return AideAdmin
+	 */
+	public function setRoute(string $route): AideAdmin
+	{
+		$this->route = $route;
+		return $this;
+	}
 }

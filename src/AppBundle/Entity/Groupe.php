@@ -3,6 +3,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\Group as BaseGroup;
 
@@ -13,58 +14,75 @@ use FOS\UserBundle\Model\Group as BaseGroup;
 class Groupe extends BaseGroup
 {
     /**
+	 * @var int
+	 *
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
 
-    /**
-     * @ORM\Column(name="nom", type="string", length=255)
-     */
-    private $nom;
+	/**
+	 * @var ArrayCollection|User[]
+	 *
+	 * @ORM\ManyToMany(targetEntity="User", inversedBy="groups", cascade={"persist"}, fetch="EXTRA_LAZY")
+	 */
+	private $users;
+
 
     /**
+	 * QUESTION
      * @ORM\Column(name="compte", type="integer", length=5)
      */
-    private $compte;
+    //private $compte;
 
 
-    /**
-     * @return mixed
-     */
-    public function getNom()
-    {
-        return $this->nom;
-    }
+	public function __construct(string $name, array $roles = array())
+	{
+		$this->users = new ArrayCollection();
 
-    /**
-     * @param mixed $nom
-     * @return Groupe
-     */
-    public function setNom($nom)
-    {
-        $this->nom = $nom;
-        return $this;
-    }
+		parent::__construct($name, $roles);
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getCompte()
-    {
-        return $this->compte;
-    }
+	/**
+	 * @return int
+	 */
+	public function getId(): int
+	{
+		return $this->id;
+	}
 
-    /**
-     * @param mixed $compte
-     * @return Groupe
-     */
-    public function setCompte($compte)
-    {
-        $this->compte = $compte;
-        return $this;
-    }
+	/**
+	 * @return User[]|ArrayCollection
+	 */
+	public function getUsers()
+	{
+		return $this->users;
+	}
 
+	/**
+	 * @param User $user
+	 * @return $this
+	 */
+	public function addUser(User $user)
+	{
+		if (!$this->users->contains($user)) {
+			$this->users[] = $user;
+			$user->addGroup($this);
+		}
+		return $this;
+	}
 
+	/**
+	 * @param User $user
+	 * @return $this
+	 */
+	public function removeUser(User $user)
+	{
+		if ($this->users->contains($user)) {
+			$this->users->removeElement($user);
+			$user->removeGroup($this);
+		}
+		return $this;
+	}
 }

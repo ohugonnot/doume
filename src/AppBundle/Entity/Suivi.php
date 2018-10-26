@@ -3,169 +3,135 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Entity\EntityTrait\EnablableEntityTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 
 /**
+ * QUESTION
  * @ORM\Entity
  * @ORM\Table(name="suivi")
  */
 class Suivi
 {
+	use TimestampableEntity, EnablableEntityTrait;
+
     /**
+	 * @var int
+	 *
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
 
-
-    /**
-     * @ORM\Column(name="created_at", type="date")
-     */
-    private $createdAt;
-
-    /**
-     * @ORM\Column(name="enabled", type="boolean", nullable=false)
-     */
-    private $enabled;
-
-    /**
-     * @ORM\Column(name="prospect", type="string", length=255)
+	/**
+	 * @var null|string
+	 *
+     * @ORM\Column(name="prospect", type="string", length=255, nullable=true)
      */
     private $prospect;
 
-    /**
-     * @ORM\Column(name="lieu", type="string", length=255)
+	/**
+	 * @var null|string
+	 *
+     * @ORM\Column(name="lieu", type="string", length=255, length=255, nullable=true)
      */
     private $lieu;
 
-    /**
-     * @ORM\Column(name="commentaire", type="text")
+	/**
+	 * @var null|string
+	 *
+     * @ORM\Column(name="commentaire", type="text", nullable=true)
      */
     private $commentaire;
 
-    /**
-     * @ORM\Column(name="auteur", type="string", length=255)
-     */
-    private $auteur;
+	/**
+	 * @var User
+	 *
+	 * @ORM\ManyToOne(targetEntity="User", inversedBy="liens")
+	 * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
+	 */
+	private $user;
 
-    /**
-     * @return mixed
-     */
-    public function getId()
+	/**
+	 * @return int
+	 */
+	public function getId(): int
     {
         return $this->id;
     }
 
+	/**
+	 * @return null|string
+	 */
+	public function getProspect(): ?string
+	{
+		return $this->prospect;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
+	/**
+	 * @param null|string $prospect
+	 * @return Suivi
+	 */
+	public function setProspect(?string $prospect)
+	{
+		$this->prospect = $prospect;
+		return $this;
+	}
 
-    /**
-     * @param mixed $createdAt
-     * @return Suivi
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-        return $this;
-    }
+	/**
+	 * @return null|string
+	 */
+	public function getLieu(): ?string
+	{
+		return $this->lieu;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getEnabled()
-    {
-        return $this->enabled;
-    }
+	/**
+	 * @param null|string $lieu
+	 * @return Suivi
+	 */
+	public function setLieu(?string $lieu)
+	{
+		$this->lieu = $lieu;
+		return $this;
+	}
 
-    /**
-     * @param mixed $enabled
-     * @return Suivi
-     */
-    public function setEnabled($enabled)
-    {
-        $this->enabled = $enabled;
-        return $this;
-    }
+	/**
+	 * @return null|string
+	 */
+	public function getCommentaire(): ?string
+	{
+		return $this->commentaire;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getProspect()
-    {
-        return $this->prospect;
-    }
+	/**
+	 * @param null|string $commentaire
+	 * @return Suivi
+	 */
+	public function setCommentaire(?string $commentaire)
+	{
+		$this->commentaire = $commentaire;
+		return $this;
+	}
 
-    /**
-     * @param mixed $prospect
-     * @return Suivi
-     */
-    public function setProspect($prospect)
-    {
-        $this->prospect = $prospect;
-        return $this;
-    }
+	/**
+	 * @return User
+	 */
+	public function getUser(): User
+	{
+		return $this->user;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getLieu()
-    {
-        return $this->lieu;
-    }
-
-    /**
-     * @param mixed $lieu
-     * @return Suivi
-     */
-    public function setLieu($lieu)
-    {
-        $this->lieu = $lieu;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCommentaire()
-    {
-        return $this->commentaire;
-    }
-
-    /**
-     * @param mixed $commentaire
-     * @return Suivi
-     */
-    public function setCommentaire($commentaire)
-    {
-        $this->commentaire = $commentaire;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAuteur()
-    {
-        return $this->auteur;
-    }
-
-    /**
-     * @param mixed $auteur
-     * @return Suivi
-     */
-    public function setAuteur($auteur)
-    {
-        $this->auteur = $auteur;
-        return $this;
-    }
-
-
+	/**
+	 * @param User $user
+	 * @return Suivi
+	 */
+	public function setUser(User $user)
+	{
+		$this->user = $user;
+		return $this;
+	}
 }

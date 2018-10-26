@@ -3,7 +3,9 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Entity\EntityTrait\EnablableEntityTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * @ORM\Entity
@@ -12,189 +14,147 @@ use Doctrine\ORM\Mapping as ORM;
 class Transaction
 {
 
-    /**
+	use TimestampableEntity, EnablableEntityTrait;
+
+	/**
+	 * @var int
+	 *
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
 
-    /**
-     * @ORM\Column(name="created_at", type="datetime")
-     */
-    private $createdAt;
-
-    /**
-     * @ORM\Column(name="enabled", type="boolean", nullable=false)
-     */
-    private $enabled;
-
-    /**
+	/**
+	 * @var string
+	 *
      * @ORM\Column(name="type", type="string", length=3)
      */
     private $type;
 
-    /**
-     * @ORM\Column(name="expediteur", type="string", length=100)
-     */
-    private $expediteur;
-
-    /**
-     * @ORM\Column(name="destinataire", type="string", length=100)
-     */
-    private $destinataire;
-
-    /**
+	/**
+	 * @var float
+	 *
      * @ORM\Column(name="montant", type="decimal", precision=7, scale=2)
      */
     private $montant;
 
-    /**
-     * @ORM\Column(name="titre", type="string", length=255)
+	/**
+	 * @var null|string
+	 *
+     * @ORM\Column(name="titre", type="string", length=255, nullable=true)
      */
-    private $titre;
+    private $reference;
 
+	/**
+	 * @var User
+	 *
+	 * @ORM\ManyToOne(targetEntity="User", inversedBy="transactionsSend", cascade={"persist"})
+	 */
+	private $expediteur;
 
-    /**
-     * ManyToMany  une Transaction a plusieurs (2) User et/ou Prestataire & un User / Prestataire a plusieurs Transaction
-     *
-     */
-
+	/**
+	 * @var User
+	 *
+	 * @ORM\ManyToOne(targetEntity="User", inversedBy="transactionsReceived", cascade={"persist"})
+	 */
+	private $destinataire;
 
     /**
      * @return mixed
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
+	/**
+	 * @param User $destinataire
+	 * @return $this
+	 */
+	public function setDestinataire(User $destinataire)
+	{
+		$this->destinataire = $destinataire;
+		return $this;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
+	/**
+	 * @return User
+	 */
+	public function getDestinataire(): User
+	{
+		return $this->destinataire;
+	}
 
-    /**
-     * @param mixed $createdAt
-     * @return Transaction
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-        return $this;
-    }
+	/**
+	 * @param User $expediteur
+	 * @return $this
+	 */
+	public function setExpediteur(User $expediteur)
+	{
+		$this->expediteur = $expediteur;
+		return $this;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getEnabled()
-    {
-        return $this->enabled;
-    }
+	/**
+	 * @return User
+	 */
+	public function getExpediteur(): User
+	{
+		return $this->expediteur;
+	}
 
-    /**
-     * @param mixed $enabled
-     * @return Transaction
-     */
-    public function setEnabled($enabled)
-    {
-        $this->enabled = $enabled;
-        return $this;
-    }
+	/**
+	 * @return string
+	 */
+	public function getType(): string
+	{
+		return $this->type;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
+	/**
+	 * @param string $type
+	 * @return Transaction
+	 */
+	public function setType(string $type)
+	{
+		$this->type = $type;
+		return $this;
+	}
 
-    /**
-     * @param mixed $type
-     * @return Transaction
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-        return $this;
-    }
+	/**
+	 * @return float
+	 */
+	public function getMontant(): float
+	{
+		return $this->montant;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getExpediteur()
-    {
-        return $this->expediteur;
-    }
+	/**
+	 * @param float $montant
+	 * @return Transaction
+	 */
+	public function setMontant(float $montant)
+	{
+		$this->montant = $montant;
+		return $this;
+	}
 
-    /**
-     * @param mixed $expediteur
-     * @return Transaction
-     */
-    public function setExpediteur($expediteur)
-    {
-        $this->expediteur = $expediteur;
-        return $this;
-    }
+	/**
+	 * @return null|string
+	 */
+	public function getReference(): ?string
+	{
+		return $this->reference;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getDestinataire()
-    {
-        return $this->destinataire;
-    }
-
-    /**
-     * @param mixed $destinataire
-     * @return Transaction
-     */
-    public function setDestinataire($destinataire)
-    {
-        $this->destinataire = $destinataire;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMontant()
-    {
-        return $this->montant;
-    }
-
-    /**
-     * @param mixed $montant
-     * @return Transaction
-     */
-    public function setMontant($montant)
-    {
-        $this->montant = $montant;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTitre()
-    {
-        return $this->titre;
-    }
-
-    /**
-     * @param mixed $titre
-     * @return Transaction
-     */
-    public function setTitre($titre)
-    {
-        $this->titre = $titre;
-        return $this;
-    }
-
-
+	/**
+	 * @param null|string $reference
+	 * @return Transaction
+	 */
+	public function setReference(?string $reference)
+	{
+		$this->reference = $reference;
+		return $this;
+	}
 }

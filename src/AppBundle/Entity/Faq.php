@@ -3,169 +3,86 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Entity\EntityTrait\EnablableEntityTrait;
+use AppBundle\Entity\EntityTrait\TimestampableEntityTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 
 /**
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks()
  * @ORM\Table(name="faq")
  */
 class Faq
 {
+	use TimestampableEntityTrait, EnablableEntityTrait;
+
     /**
+	 * @var int
+	 *
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
 
+	/**
+	 * @var null|Fichier
+	 *
+	 * @Assert\Valid()
+	 * @ORM\OneToOne(targetEntity="Fichier", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
+	 */
+	protected $fichier;
 
-    /**
-     * @ORM\Column(name="created_at", type="date")
-     */
-    private $createdAt;
-
-    /**
-     * @ORM\Column(name="enabled", type="boolean", nullable=false)
-     */
-    private $enabled;
-
-    /**
-     * @ORM\Column(name="titre", type="string", length=255)
-     */
-    private $titre;
-
-    /**
-     * @ORM\Column(name="texte", type="text")
-     */
-    private $texte;
-
-    /**
-     * @ORM\Column(name="fichier", type="string", length=255)
-     */
-    private $fichier;
-
-    /**
-     * @ORM\Column(name="auteur", type="string", length=255)
-     */
-    private $auteur;
+	/**
+	 * @var null|User
+	 *
+	 * @ORM\ManyToOne(targetEntity="User", inversedBy="faqs", cascade={"persist"})
+	 * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
+	 */
+	private $user;
 
     /**
      * @return mixed
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
+	/**
+	 * @return null|User
+	 */
+	public function getUser(): ?User
+	{
+		return $this->user;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
+	/**
+	 * @param null|User $user
+	 * @return $this
+	 */
+	public function setUser(?User $user)
+	{
+		$this->user = $user;
+		return $this;
+	}
 
-    /**
-     * @param mixed $createdAt
-     * @return Faq
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-        return $this;
-    }
+	/**
+	 * @return Fichier|null
+	 */
+	public function getFichier(): ?Fichier
+	{
+		return $this->fichier;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getEnabled()
-    {
-        return $this->enabled;
-    }
-
-    /**
-     * @param mixed $enabled
-     * @return Faq
-     */
-    public function setEnabled($enabled)
-    {
-        $this->enabled = $enabled;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTitre()
-    {
-        return $this->titre;
-    }
-
-    /**
-     * @param mixed $titre
-     * @return Faq
-     */
-    public function setTitre($titre)
-    {
-        $this->titre = $titre;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTexte()
-    {
-        return $this->texte;
-    }
-
-    /**
-     * @param mixed $texte
-     * @return Faq
-     */
-    public function setTexte($texte)
-    {
-        $this->texte = $texte;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getFichier()
-    {
-        return $this->fichier;
-    }
-
-    /**
-     * @param mixed $fichier
-     * @return Faq
-     */
-    public function setFichier($fichier)
-    {
-        $this->fichier = $fichier;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAuteur()
-    {
-        return $this->auteur;
-    }
-
-    /**
-     * @param mixed $auteur
-     * @return Faq
-     */
-    public function setAuteur($auteur)
-    {
-        $this->auteur = $auteur;
-        return $this;
-    }
-
-
+	/**
+	 * @param Fichier|null $fichier
+	 * @return Faq
+	 */
+	public function setFichier(?Fichier $fichier)
+	{
+		$this->fichier = $fichier;
+		return $this;
+	}
 }

@@ -3,7 +3,10 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Entity\EntityTrait\EnablableEntityTrait;
+use AppBundle\Entity\EntityTrait\NameSlugContentEntityTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * @ORM\Entity
@@ -12,166 +15,72 @@ use Doctrine\ORM\Mapping as ORM;
 class Message
 {
 
+	use NameSlugContentEntityTrait, EnablableEntityTrait, TimestampableEntity;
+	
     /**
+	 * @var int
+	 * 
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
 
-    /**
-     * @ORM\Column(name="created_at", type="datetime")
-     */
-    private $createdAt;
+	/**
+	 * @var User
+	 * 
+	 * @ORM\ManyToOne(targetEntity="User", inversedBy="messagesSend", cascade={"persist"})
+	 */
+	private $expediteur;
+
+	/**
+	 * @var User
+	 *
+	 * @ORM\ManyToOne(targetEntity="User", inversedBy="messagesReceived", cascade={"persist"})
+	 */
+	private $destinataire;
 
     /**
-     * @ORM\Column(name="enabled", type="boolean", nullable=false)
+     * @return int
      */
-    private $enabled;
-
-    /**
-     * @ORM\Column(name="expediteur", type="string", length=20)
-     */
-    private $expediteur;
-
-    /**
-     * @ORM\Column(name="destinataire", type="string", length=20)
-     */
-    private $destinataire;
-
-
-    /**
-     * @ORM\Column(name="titre", type="string", length=250)
-     */
-    private $titre;
-
-    /**
-     * @ORM\Column(name="texte", type="text")
-     */
-    private $texte;
-
-
-    /**
-     * ManyToMany un Message a plusieurs User (1 Expe + 1 Dest) & un User a plusieurs Message
-     */
-
-
-    /**
-     * @return mixed
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
+	/**
+	 * @param User $destinataire
+	 * @return $this
+	 */
+	public function setDestinataire(User $destinataire)
+	{
+		$this->destinataire = $destinataire;
+		return $this;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
+	/**
+	 * @return User
+	 */
+	public function getDestinataire(): User
+	{
+		return $this->destinataire;
+	}
 
-    /**
-     * @param mixed $createdAt
-     * @return Message
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-        return $this;
-    }
+	/**
+	 * @param User $expediteur
+	 * @return $this
+	 */
+	public function setExpediteur(User $expediteur)
+	{
+		$this->expediteur = $expediteur;
+		return $this;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getEnabled()
-    {
-        return $this->enabled;
-    }
-
-    /**
-     * @param mixed $enabled
-     * @return Message
-     */
-    public function setEnabled($enabled)
-    {
-        $this->enabled = $enabled;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getExpediteur()
-    {
-        return $this->expediteur;
-    }
-
-    /**
-     * @param mixed $expediteur
-     * @return Message
-     */
-    public function setExpediteur($expediteur)
-    {
-        $this->expediteur = $expediteur;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDestinataire()
-    {
-        return $this->destinataire;
-    }
-
-    /**
-     * @param mixed $destinataire
-     * @return Message
-     */
-    public function setDestinataire($destinataire)
-    {
-        $this->destinataire = $destinataire;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTitre()
-    {
-        return $this->titre;
-    }
-
-    /**
-     * @param mixed $titre
-     * @return Message
-     */
-    public function setTitre($titre)
-    {
-        $this->titre = $titre;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTexte()
-    {
-        return $this->texte;
-    }
-
-    /**
-     * @param mixed $texte
-     * @return Message
-     */
-    public function setTexte($texte)
-    {
-        $this->texte = $texte;
-        return $this;
-    }
-
-
+	/**
+	 * @return User
+	 */
+	public function getExpediteur(): User
+	{
+		return $this->expediteur;
+	}
 }

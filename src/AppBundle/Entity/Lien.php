@@ -3,7 +3,10 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Entity\EntityTrait\EnablableEntityTrait;
+use AppBundle\Entity\EntityTrait\NameSlugContentEntityTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 
 /**
@@ -12,160 +15,74 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Lien
 {
+	use TimestampableEntity, EnablableEntityTrait, NameSlugContentEntityTrait;
+
     /**
+	 * @var int
+	 *
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
 
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="url", type="string", length=255)
+	 */
+	private $url;
 
-    /**
-     * @ORM\Column(name="created_at", type="date")
-     */
-    private $createdAt;
-
-    /**
-     * @ORM\Column(name="enabled", type="boolean", nullable=false)
-     */
-    private $enabled;
-
-    /**
-     * @ORM\Column(name="titre", type="string", length=255)
-     */
-    private $titre;
-
-    /**
-     * @ORM\Column(name="texte", type="text")
-     */
-    private $texte;
-
-    /**
-     * @ORM\Column(name="url", type="string", length=255)
-     */
-    private $url;
-
-    /**
-     * @ORM\Column(name="auteur", type="string", length=255)
-     */
-    private $auteur;
-
-    /**
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
+	/**
+	 * @var User
+	 *
+	 * @ORM\ManyToOne(targetEntity="User", inversedBy="liens")
+	 * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
+	 */
+	private $user;
 
 
-    /**
-     * @return mixed
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
+	/**
+	 * @return mixed
+	 */
+	public function getId()
+	{
+		return $this->id;
+	}
 
-    /**
-     * @param mixed $createdAt
-     * @return Lien
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-        return $this;
-    }
+	/**
+	 * @return string
+	 */
+	public function getUrl(): string
+	{
+		return $this->url;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getEnabled()
-    {
-        return $this->enabled;
-    }
+	/**
+	 * @param string $url
+	 * @return Lien
+	 */
+	public function setUrl(string $url)
+	{
+		$this->url = $url;
+		return $this;
+	}
 
-    /**
-     * @param mixed $enabled
-     * @return Lien
-     */
-    public function setEnabled($enabled)
-    {
-        $this->enabled = $enabled;
-        return $this;
-    }
+	/**
+	 * @param User $user
+	 * @return $this
+	 */
+	public function setUser(User $user)
+	{
+		$this->user = $user;
+		return $this;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getTitre()
-    {
-        return $this->titre;
-    }
-
-    /**
-     * @param mixed $titre
-     * @return Lien
-     */
-    public function setTitre($titre)
-    {
-        $this->titre = $titre;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTexte()
-    {
-        return $this->texte;
-    }
-
-    /**
-     * @param mixed $texte
-     * @return Lien
-     */
-    public function setTexte($texte)
-    {
-        $this->texte = $texte;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUrl()
-    {
-        return $this->url;
-    }
-
-    /**
-     * @param mixed $url
-     * @return Lien
-     */
-    public function setUrl($url)
-    {
-        $this->url = $url;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAuteur()
-    {
-        return $this->auteur;
-    }
-
-    /**
-     * @param mixed $auteur
-     * @return Lien
-     */
-    public function setAuteur($auteur)
-    {
-        $this->auteur = $auteur;
-        return $this;
-    }
-
-
+	/**
+	 * @return User
+	 */
+	public function getUser(): User
+	{
+		return $this->user;
+	}
 }

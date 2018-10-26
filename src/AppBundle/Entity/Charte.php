@@ -3,120 +3,85 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Entity\EntityTrait\NameSlugContentEntityTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks()
  * @ORM\Table(name="charte")
  */
 class Charte
 {
+	use NameSlugContentEntityTrait;
+
     /**
+	 * @var int
+	 *
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
      */
     protected $id;
 
-    /**
-     * @ORM\Column(name="url", type="string", length=30)
-     */
-    private $url;
+	/**
+	 * @var null|Image
+	 *
+	 * @Assert\Valid()
+	 * @ORM\OneToOne(targetEntity="Image", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
+	 */
+    private $image;
 
-    /**
-     * @ORM\Column(name="titre", type="string", length=255)
-     */
-    private $titre;
+	/**
+	 * @var null|Fichier
+	 *
+	 * @Assert\Valid()
+	 * @ORM\OneToOne(targetEntity="Fichier", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
+	 */
+	protected $fichier;
 
-    /**
-     * @ORM\Column(name="texte", type="text")
-     */
-    private $texte;
+	/**
+	 * @return int
+	 */
+	public function getId(): int
+	{
+		return $this->id;
+	}
 
-    /**
-     * @ORM\Column(name="fichier", type="string", length=255)
-     */
-    private $fichier;
+	/**
+	 * @return Image|null
+	 */
+	public function getImage(): ?Image
+	{
+		return $this->image;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
+	/**
+	 * @param Image|null $image
+	 * @return Charte
+	 */
+	public function setImage(?Image $image)
+	{
+		$this->image = $image;
+		return $this;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getUrl()
-    {
-        return $this->url;
-    }
+	/**
+	 * @return Fichier|null
+	 */
+	public function getFichier(): ?Fichier
+	{
+		return $this->fichier;
+	}
 
-    /**
-     * @param mixed $url
-     * @return Page
-     */
-    public function setUrl($url)
-    {
-        $this->url = $url;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTitre()
-    {
-        return $this->titre;
-    }
-
-    /**
-     * @param mixed $titre
-     * @return Page
-     */
-    public function setTitre($titre)
-    {
-        $this->titre = $titre;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTexte()
-    {
-        return $this->texte;
-    }
-
-    /**
-     * @param mixed $texte
-     * @return Page
-     */
-    public function setTexte($texte)
-    {
-        $this->texte = $texte;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getFichier()
-    {
-        return $this->fichier;
-    }
-
-    /**
-     * @param mixed $fichier
-     * @return Page
-     */
-    public function setFichier($fichier)
-    {
-        $this->fichier = $fichier;
-        return $this;
-    }
-
-
+	/**
+	 * @param Fichier|null $fichier
+	 * @return Charte
+	 */
+	public function setFichier(?Fichier $fichier)
+	{
+		$this->fichier = $fichier;
+		return $this;
+	}
 }

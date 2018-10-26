@@ -3,6 +3,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Entity\EntityTrait\NameSlugContentEntityTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -11,59 +12,39 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Siege
 {
+	use NameSlugContentEntityTrait;
+
     /**
+	 * @var int
+	 *
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
 
-    /**
-     * @ORM\Column(name="nom", type="string", length=255)
-     */
-    private $nom;
-
-    /**
-     * @ORM\Column(name="compte", type="integer", length=5)
+	/**
+	 * @var int
+	 * QUESTION
+	 * @ORM\Column(name="compte", type="integer", length=5)
      */
     private $compte;
 
+	/**
+	 * @return int
+	 */
+	public function getCompte(): int
+	{
+		return $this->compte;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getNom()
-    {
-        return $this->nom;
-    }
-
-    /**
-     * @param mixed $nom
-     * @return Siege
-     */
-    public function setNom($nom)
-    {
-        $this->nom = $nom;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCompte()
-    {
-        return $this->compte;
-    }
-
-    /**
-     * @param mixed $compte
-     * @return Siege
-     */
-    public function setCompte($compte)
-    {
-        $this->compte = $compte;
-        return $this;
-    }
-
-
+	/**
+	 * @param int $compte
+	 * @return Siege
+	 */
+	public function setCompte(int $compte)
+	{
+		$this->compte = $compte;
+		return $this;
+	}
 }

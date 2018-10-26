@@ -3,169 +3,87 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Entity\EntityTrait\EnablableEntityTrait;
+use AppBundle\Entity\EntityTrait\NameSlugContentEntityTrait;
+use AppBundle\Entity\EntityTrait\TimestampableEntityTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 
 /**
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks()
  * @ORM\Table(name="document")
  */
 class Document
 {
+	use EnablableEntityTrait, TimestampableEntityTrait, NameSlugContentEntityTrait;
+
     /**
+	 * @var int
+	 *
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
 
+	/**
+	 * @var null|Fichier
+	 *
+	 * @Assert\Valid()
+	 * @ORM\OneToOne(targetEntity="Fichier", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
+	 */
+	protected $fichier;
 
-    /**
-     * @ORM\Column(name="created_at", type="date")
-     */
-    private $createdAt;
+	/**
+	 * @var User
+	 *
+	 * @ORM\ManyToOne(targetEntity="User", inversedBy="documents", cascade={"persist"})
+	 * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
+	 */
+	private $user;
 
-    /**
-     * @ORM\Column(name="enabled", type="boolean", nullable=false)
-     */
-    private $enabled;
+	/**
+	 * @return int
+	 */
+	public function getId(): int
+	{
+		return $this->id;
+	}
 
-    /**
-     * @ORM\Column(name="titre", type="string", length=255)
-     */
-    private $titre;
+	/**
+	 * @return null|User
+	 */
+	public function getUser(): ?User
+	{
+		return $this->user;
+	}
 
-    /**
-     * @ORM\Column(name="texte", type="text")
-     */
-    private $texte;
+	/**
+	 * @param null|User $user
+	 * @return $this
+	 */
+	public function setUser(?User $user)
+	{
+		$this->user = $user;
+		return $this;
+	}
 
-    /**
-     * @ORM\Column(name="fichier", type="string", length=255)
-     */
-    private $fichier;
+	/**
+	 * @return Fichier|null
+	 */
+	public function getFichier(): ?Fichier
+	{
+		return $this->fichier;
+	}
 
-    /**
-     * @ORM\Column(name="auteur", type="string", length=255)
-     */
-    private $auteur;
-
-    /**
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-
-    /**
-     * @return mixed
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @param mixed $createdAt
-     * @return Document
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getEnabled()
-    {
-        return $this->enabled;
-    }
-
-    /**
-     * @param mixed $enabled
-     * @return Document
-     */
-    public function setEnabled($enabled)
-    {
-        $this->enabled = $enabled;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTitre()
-    {
-        return $this->titre;
-    }
-
-    /**
-     * @param mixed $titre
-     * @return Document
-     */
-    public function setTitre($titre)
-    {
-        $this->titre = $titre;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTexte()
-    {
-        return $this->texte;
-    }
-
-    /**
-     * @param mixed $texte
-     * @return Document
-     */
-    public function setTexte($texte)
-    {
-        $this->texte = $texte;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getFichier()
-    {
-        return $this->fichier;
-    }
-
-    /**
-     * @param mixed $fichier
-     * @return Document
-     */
-    public function setFichier($fichier)
-    {
-        $this->fichier = $fichier;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAuteur()
-    {
-        return $this->auteur;
-    }
-
-    /**
-     * @param mixed $auteur
-     * @return Document
-     */
-    public function setAuteur($auteur)
-    {
-        $this->auteur = $auteur;
-        return $this;
-    }
-
-
+	/**
+	 * @param Fichier|null $fichier
+	 * @return Document
+	 */
+	public function setFichier(?Fichier $fichier)
+	{
+		$this->fichier = $fichier;
+		return $this;
+	}
 }

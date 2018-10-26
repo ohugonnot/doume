@@ -3,6 +3,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Entity\EntityTrait\NameSlugContentEntityTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -12,7 +13,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Rubrique
 {
+	use NameSlugContentEntityTrait;
+
     /**
+	 * @var int
+	 *
      * @ORM\Id
      * @ORM\Column(name="id", type="integer")
      * @ORM\GeneratedValue
@@ -20,39 +25,25 @@ class Rubrique
     protected $id;
 
     /**
-     * @ORM\Column(name="nom", type="string", length=20)
-     */
-    private $nom;
-    /**
      * @var ArrayCollection|Prestataire[]
-     * @ORM\ManyToMany(targetEntity="Prestataire", inversedBy="rubrique", cascade={"persist"}, fetch="EXTRA_LAZY")
+	 *
+     * @ORM\ManyToMany(targetEntity="Prestataire", inversedBy="rubriques", cascade={"persist"}, fetch="EXTRA_LAZY")
      */
     private $prestataires;
 
+	/**
+	 * @var ArrayCollection|Annonce[]
+	 *
+	 * @ORM\ManyToMany(targetEntity="Annonce", inversedBy="rubriques", cascade={"persist"}, fetch="EXTRA_LAZY")
+	 */
+	private $annonces;
+
     /**
      * @return mixed
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getNom()
-    {
-        return $this->nom;
-    }
-
-    /**
-     * @param mixed $nom
-     * @return Rubrique
-     */
-    public function setNom($nom)
-    {
-        $this->nom = $nom;
-        return $this;
     }
 
     /**
@@ -89,5 +80,37 @@ class Rubrique
         return $this;
     }
 
+	/**
+	 * @return Annonce[]|ArrayCollection
+	 */
+	public function getAnnonces()
+	{
+		return $this->annonces;
+	}
 
+	/**
+	 * @param Annonce $annonce
+	 * @return $this
+	 */
+	public function addAnnonce(Annonce $annonce)
+	{
+		if (!$this->annonces->contains($annonce)) {
+			$this->annonces[] = $annonce;
+			$annonce->addRubrique($this);
+		}
+		return $this;
+	}
+
+	/**
+	 * @param Annonce $annonce
+	 * @return $this
+	 */
+	public function removeAnnonce(Annonce $annonce)
+	{
+		if ($this->annonces->contains($annonce)) {
+			$this->annonces->removeElement($annonce);
+			$annonce->removeRubrique($this);
+		}
+		return $this;
+	}
 }

@@ -3,68 +3,115 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Entity\EntityTrait\EnablableEntityTrait;
+use AppBundle\Entity\EntityTrait\NameSlugContentEntityTrait;
+use AppBundle\Entity\EntityTrait\TimestampableEntityTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks()
  * @ORM\Table(name="annonce")
  */
 class Annonce
 {
+	use TimestampableEntityTrait, NameSlugContentEntityTrait, EnablableEntityTrait;
+
+	const UPLOAD_DIR = "annonce";
+
     /**
+	 * @var int
+	 *
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
 
-
     /**
-     * @ORM\Column(name="created_at", type="date")
-     */
-    private $createdAt;
-
-    /**
-     * @ORM\Column(name="enabled", type="boolean", nullable=false)
-     */
-    private $enabled;
-
-    /**
-     * @ORM\Column(name="categorie", type="string", length=100)
-     */
-    private $categorie;
-
-    /**
-     * @ORM\Column(name="titre", type="string", length=255)
-     */
-    private $titre;
-
-    /**
-     * @ORM\Column(name="description", type="text")
-     */
-    private $description;
-
-    /**
-     * @ORM\Column(name="fichier", type="string", length=150)
-     */
-    private $fichier;
-
-    /**
+	 * @var float
+	 *
      * @ORM\Column(name="prix", type="decimal", precision=6, scale=2)
      */
     private $prix;
 
+	/**
+	 * @var ArrayCollection|Rubrique[]
+	 *
+	 * @ORM\ManyToMany(targetEntity="Rubrique", mappedBy="annonces", cascade={"persist"}, fetch="EXTRA_LAZY")
+	 * @ORM\JoinTable(name="rubrique_annonce")
+	 */
+	private $rubriques;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="annonce")
+	 * @var User
+	 *
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="annonces", cascade={"persist"})
+	 * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
     private $user;
 
-    /**
-     * @return User
-     */
-    public function getUser()
+	/**
+	 * @var null|Fichier
+	 *
+	 * @Assert\Valid()
+	 * @ORM\OneToOne(targetEntity="Fichier", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
+	 */
+	protected $fichier;
+
+	public function __construct()
+	{
+		$this->rubriques = new ArrayCollection();
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getId(): int
+	{
+		return $this->id;
+	}
+
+	/**
+	 * @return Rubrique[]|ArrayCollection
+	 */
+	public function getRubriques()
+	{
+		return $this->rubriques;
+	}
+
+	/**
+	 * @param Rubrique $rubrique
+	 * @return $this
+	 */
+	public function addRubrique(Rubrique $rubrique)
+	{
+		if (!$this->rubriques->contains($rubrique)) {
+			$this->rubriques[] = $rubrique;
+			$rubrique->addAnnonce($this);
+		}
+		return $this;
+	}
+
+	/**
+	 * @param Rubrique $rubrique
+	 * @return $this
+	 */
+	public function removeRubrique(Rubrique $rubrique)
+	{
+		if ($this->rubriques->contains($rubrique)) {
+			$this->rubriques->removeElement($rubrique);
+			$rubrique->removeAnnonce($this);
+		}
+		return $this;
+	}
+
+	/**
+	 * @return User
+	 */
+	public function getUser(): User
     {
         return $this->user;
     }
@@ -79,141 +126,40 @@ class Annonce
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
+	/**
+	 * @return float
+	 */
+	public function getPrix(): float
+	{
+		return $this->prix;
+	}
 
+	/**
+	 * @param float $prix
+	 * @return Annonce
+	 */
+	public function setPrix(float $prix)
+	{
+		$this->prix = $prix;
+		return $this;
+	}
 
-    /**
-     * @return mixed
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
+	/**
+	 * @return null|Fichier
+	 */
+	public function getFichier(): ?Fichier
+	{
+		return $this->fichier;
+	}
 
-    /**
-     * @param mixed $createdAt
-     * @return Annonce
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getEnabled()
-    {
-        return $this->enabled;
-    }
-
-    /**
-     * @param mixed $enabled
-     * @return Annonce
-     */
-    public function setEnabled($enabled)
-    {
-        $this->enabled = $enabled;
-        return $this;
-    }
-
-
-    /**
-     * @return mixed
-     */
-    public function getCategorie()
-    {
-        return $this->categorie;
-    }
-
-    /**
-     * @param mixed $categorie
-     * @return Annonce
-     */
-    public function setCategorie($categorie)
-    {
-        $this->categorie = $categorie;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTitre()
-    {
-        return $this->titre;
-    }
-
-    /**
-     * @param mixed $titre
-     * @return Annonce
-     */
-    public function setTitre($titre)
-    {
-        $this->titre = $titre;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param mixed $description
-     * @return Annonce
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getFichier()
-    {
-        return $this->fichier;
-    }
-
-    /**
-     * @param mixed $fichier
-     * @return Annonce
-     */
-    public function setFichier($fichier)
-    {
-        $this->fichier = $fichier;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPrix()
-    {
-        return $this->prix;
-    }
-
-    /**
-     * @param mixed $prix
-     * @return Annonce
-     */
-    public function setPrix($prix)
-    {
-        $this->prix = $prix;
-        return $this;
-    }
-
-
+	/**
+	 * @param Fichier $fichier
+	 * @return Annonce
+	 */
+	public function setFichier(Fichier $fichier)
+	{
+		$fichier->setType(self::UPLOAD_DIR);
+		$this->fichier = $fichier;
+		return $this;
+	}
 }
