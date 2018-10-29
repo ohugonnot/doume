@@ -9,7 +9,7 @@ use AppBundle\Entity\EntityTrait\GeolocEntityTrait;
 use AppBundle\Entity\EntityTrait\NameSlugContentEntityTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -17,7 +17,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Marche
 {
-	use NameSlugContentEntityTrait, GeolocEntityTrait, EnablableEntityTrait, ContactEmailTelTrait;
+	use NameSlugContentEntityTrait,
+		GeolocEntityTrait,
+		EnablableEntityTrait,
+		ContactEmailTelTrait;
 
     /**
 	 * @var int
@@ -55,9 +58,9 @@ class Marche
 	}
 
 	/**
-     * @return mixed
-     */
-    public function getId()
+	 * @return int
+	 */
+	public function getId(): int
     {
         return $this->id;
     }

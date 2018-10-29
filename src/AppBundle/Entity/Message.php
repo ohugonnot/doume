@@ -7,6 +7,7 @@ use AppBundle\Entity\EntityTrait\EnablableEntityTrait;
 use AppBundle\Entity\EntityTrait\NameSlugContentEntityTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -15,7 +16,9 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 class Message
 {
 
-	use NameSlugContentEntityTrait, EnablableEntityTrait, TimestampableEntity;
+	use NameSlugContentEntityTrait,
+		EnablableEntityTrait,
+		TimestampableEntity;
 	
     /**
 	 * @var int

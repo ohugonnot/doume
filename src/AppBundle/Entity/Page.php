@@ -7,6 +7,7 @@ use AppBundle\Entity\EntityTrait\EnablableEntityTrait;
 use AppBundle\Entity\EntityTrait\NameSlugContentEntityTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -14,7 +15,9 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  */
 class Page
 {
-	use NameSlugContentEntityTrait, TimestampableEntity, EnablableEntityTrait;
+	use NameSlugContentEntityTrait,
+		TimestampableEntity,
+		EnablableEntityTrait;
 
     /**
 	 * @var int

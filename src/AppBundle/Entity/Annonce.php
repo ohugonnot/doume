@@ -17,7 +17,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Annonce
 {
-	use TimestampableEntityTrait, NameSlugContentEntityTrait, EnablableEntityTrait;
+	use TimestampableEntityTrait,
+		NameSlugContentEntityTrait,
+		EnablableEntityTrait;
 
 	const UPLOAD_DIR = "annonce";
 

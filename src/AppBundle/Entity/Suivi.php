@@ -6,7 +6,7 @@ namespace AppBundle\Entity;
 use AppBundle\Entity\EntityTrait\EnablableEntityTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * QUESTION
@@ -15,7 +15,8 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  */
 class Suivi
 {
-	use TimestampableEntity, EnablableEntityTrait;
+	use TimestampableEntity,
+		EnablableEntityTrait;
 
     /**
 	 * @var int

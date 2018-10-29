@@ -16,6 +16,8 @@ class Charte
 {
 	use NameSlugContentEntityTrait;
 
+	const UPLOAD_DIR = "charte";
+
     /**
 	 * @var int
 	 *
@@ -63,6 +65,7 @@ class Charte
 	 */
 	public function setImage(?Image $image)
 	{
+		$image->setType(self::UPLOAD_DIR);
 		$this->image = $image;
 		return $this;
 	}
@@ -81,6 +84,7 @@ class Charte
 	 */
 	public function setFichier(?Fichier $fichier)
 	{
+		$fichier->setType(self::UPLOAD_DIR);
 		$this->fichier = $fichier;
 		return $this;
 	}

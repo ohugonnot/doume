@@ -3,8 +3,11 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Entity\EntityTrait\HasCompteEntity;
 use AppBundle\Entity\EntityTrait\NameSlugContentEntityTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -12,7 +15,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Siege
 {
-	use NameSlugContentEntityTrait;
+	use NameSlugContentEntityTrait,
+		HasCompteEntity;
 
     /**
 	 * @var int
@@ -24,27 +28,55 @@ class Siege
     protected $id;
 
 	/**
-	 * @var int
-	 * QUESTION
-	 * @ORM\Column(name="compte", type="integer", length=5)
-     */
-    private $compte;
+	 * @var ArrayCollection|User[]
+	 * @ORM\OneToMany(targetEntity="User", mappedBy="siege", cascade={"persist"})
+	 */
+	private $users;
+
+	public function __construct()
+	{
+		$this->users = new ArrayCollection();
+	}
 
 	/**
 	 * @return int
 	 */
-	public function getCompte(): int
+	public function getId(): int
 	{
-		return $this->compte;
+		return $this->id;
 	}
 
 	/**
-	 * @param int $compte
-	 * @return Siege
+	 * @return User[]|ArrayCollection
 	 */
-	public function setCompte(int $compte)
+	public function getUsers()
 	{
-		$this->compte = $compte;
+		return $this->users;
+	}
+
+	/**
+	 * @param User $user
+	 * @return $this
+	 */
+	public function addUser(User $user)
+	{
+		if (!$this->users->contains($user)) {
+			$this->users[] = $user;
+			$user->setSiege($this);
+		}
+		return $this;
+	}
+
+	/**
+	 * @param User $user
+	 * @return $this
+	 */
+	public function removeUser(User $user)
+	{
+		if ($this->users->contains($user)) {
+			$this->users->removeElement($user);
+			$user->setSiege(null);
+		}
 		return $this;
 	}
 }

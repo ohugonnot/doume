@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -13,6 +14,18 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 class Cotisation
 {
 	use TimestampableEntity;
+
+	const TYPE_ANY = "any value in database";
+
+	const TYPES = [
+		self::TYPE_ANY => 'any label in select'
+	];
+
+	const MOYEN_ANY = "any value in database";
+
+	const MOYENS = [
+		self::MOYEN_ANY => 'any label in select'
+	];
 
     /**
 	 * @var int

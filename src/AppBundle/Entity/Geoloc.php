@@ -4,9 +4,9 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * QUESTION nullable
  * @ORM\Entity
  * @ORM\Table(name="geoloc")
  */

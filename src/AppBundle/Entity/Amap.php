@@ -9,7 +9,7 @@ use AppBundle\Entity\EntityTrait\NameSlugContentEntityTrait;
 use AppBundle\Entity\EntityTrait\TimestampableEntityTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -18,7 +18,10 @@ use Doctrine\ORM\Mapping as ORM;
 class Amap
 {
 
-	use NameSlugContentEntityTrait, TimestampableEntityTrait, GeolocEntityTrait, ContactEmailTelTrait;
+	use NameSlugContentEntityTrait,
+		TimestampableEntityTrait,
+		GeolocEntityTrait,
+		ContactEmailTelTrait;
 
     /**
 	 * @var int

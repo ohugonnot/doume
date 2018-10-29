@@ -7,7 +7,7 @@ use AppBundle\Entity\EntityTrait\EnablableEntityTrait;
 use AppBundle\Entity\EntityTrait\NameSlugContentEntityTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -15,7 +15,9 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  */
 class Lien
 {
-	use TimestampableEntity, EnablableEntityTrait, NameSlugContentEntityTrait;
+	use TimestampableEntity,
+		EnablableEntityTrait,
+		NameSlugContentEntityTrait;
 
     /**
 	 * @var int
@@ -34,10 +36,10 @@ class Lien
 	private $url;
 
 	/**
-	 * @var User
+	 * @var null|User
 	 *
 	 * @ORM\ManyToOne(targetEntity="User", inversedBy="liens")
-	 * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
+	 * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
 	 */
 	private $user;
 
@@ -69,19 +71,19 @@ class Lien
 	}
 
 	/**
-	 * @param User $user
+	 * @param null|User $user
 	 * @return $this
 	 */
-	public function setUser(User $user)
+	public function setUser(?User $user)
 	{
 		$this->user = $user;
 		return $this;
 	}
 
 	/**
-	 * @return User
+	 * @return null|User
 	 */
-	public function getUser(): User
+	public function getUser(): ?User
 	{
 		return $this->user;
 	}

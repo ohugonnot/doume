@@ -3,9 +3,11 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Entity\EntityTrait\HasCompteEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\Group as BaseGroup;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -13,6 +15,8 @@ use FOS\UserBundle\Model\Group as BaseGroup;
  */
 class Groupe extends BaseGroup
 {
+	use HasCompteEntity;
+
     /**
 	 * @var int
 	 *
@@ -29,17 +33,16 @@ class Groupe extends BaseGroup
 	 */
 	private $users;
 
-
-    /**
-	 * QUESTION
-     * @ORM\Column(name="compte", type="integer", length=5)
-     */
-    //private $compte;
-
+	/**
+	 * @var ArrayCollection|User[]
+	 * @ORM\OneToMany(targetEntity="User", mappedBy="myGroup", cascade={"persist"})
+	 */
+	private $gestionnaires;
 
 	public function __construct(string $name, array $roles = array())
 	{
 		$this->users = new ArrayCollection();
+		$this->gestionnaires = new ArrayCollection();
 
 		parent::__construct($name, $roles);
 	}
@@ -85,4 +88,39 @@ class Groupe extends BaseGroup
 		}
 		return $this;
 	}
+
+	/**
+	 * @return User[]|ArrayCollection
+	 */
+	public function getGestionnaires()
+	{
+		return $this->gestionnaires;
+	}
+
+	/**
+	 * @param User $gestionnaire
+	 * @return $this
+	 */
+	public function addGestionnaire(User $gestionnaire)
+	{
+		if (!$this->gestionnaires->contains($gestionnaire)) {
+			$this->gestionnaires[] = $gestionnaire;
+			$gestionnaire->setMyGroup($this);
+		}
+		return $this;
+	}
+
+	/**
+	 * @param User $gestionnaire
+	 * @return $this
+	 */
+	public function removeGestionnaire(User $gestionnaire)
+	{
+		if ($this->gestionnaires->contains($gestionnaire)) {
+			$this->gestionnaires->removeElement($gestionnaire);
+			$gestionnaire->setMyGroup(null);
+		}
+		return $this;
+	}
+
 }

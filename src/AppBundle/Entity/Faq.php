@@ -6,7 +6,7 @@ namespace AppBundle\Entity;
 use AppBundle\Entity\EntityTrait\EnablableEntityTrait;
 use AppBundle\Entity\EntityTrait\TimestampableEntityTrait;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -15,8 +15,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Faq
 {
-	use TimestampableEntityTrait, EnablableEntityTrait;
+	use TimestampableEntityTrait,
+		EnablableEntityTrait;
 
+	const UPLOAD_DIR = "faq";
     /**
 	 * @var int
 	 *

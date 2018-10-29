@@ -7,7 +7,7 @@ use AppBundle\Entity\EntityTrait\EnablableEntityTrait;
 use AppBundle\Entity\EntityTrait\NameSlugContentEntityTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -16,7 +16,11 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  */
 class News
 {
-	use TimestampableEntity, NameSlugContentEntityTrait, EnablableEntityTrait;
+	use TimestampableEntity,
+		NameSlugContentEntityTrait,
+		EnablableEntityTrait;
+
+	const UPLOAD_DIR = "news";
 
     /**
 	 * @var int
@@ -43,12 +47,12 @@ class News
 	 */
 	private $user;
 
-    /**
-	 * QUESTION
-     * @ORM\Column(name="groupe", type="string", length=255)
-     */
-    private $groupe;
-
+	/**
+	 * @var bool
+	 *
+	 * @ORM\Column(type="boolean", name="visible_by_all_groups")
+	 */
+	private $visibleByAllGroups = true;
 
 	/**
 	 * @return int
@@ -90,7 +94,26 @@ class News
 	 */
 	public function setFichier(?Fichier $fichier)
 	{
+		$fichier->setType(self::UPLOAD_DIR);
 		$this->fichier = $fichier;
+		return $this;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isVisibleByAllGroups(): bool
+	{
+		return $this->visibleByAllGroups;
+	}
+
+	/**
+	 * @param bool $visibleByAllGroups
+	 * @return News
+	 */
+	public function setVisibleByAllGroups(bool $visibleByAllGroups)
+	{
+		$this->visibleByAllGroups = $visibleByAllGroups;
 		return $this;
 	}
 }

@@ -7,7 +7,7 @@ use AppBundle\Entity\EntityTrait\EnablableEntityTrait;
 use AppBundle\Entity\EntityTrait\NameSlugContentEntityTrait;
 use AppBundle\Entity\EntityTrait\TimestampableEntityTrait;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -16,7 +16,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Document
 {
-	use EnablableEntityTrait, TimestampableEntityTrait, NameSlugContentEntityTrait;
+	use EnablableEntityTrait,
+		TimestampableEntityTrait,
+		NameSlugContentEntityTrait;
+
+	const UPLOAD_DIR = "document";
 
     /**
 	 * @var int
@@ -83,6 +87,7 @@ class Document
 	 */
 	public function setFichier(?Fichier $fichier)
 	{
+		$fichier->setType(self::UPLOAD_DIR);
 		$this->fichier = $fichier;
 		return $this;
 	}

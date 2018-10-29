@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\GroupInterface;
 use FOS\UserBundle\Model\User as BaseUser;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -38,14 +39,14 @@ class User extends BaseUser
 	/**
 	 * @var string
 	 *
-     * @ORM\Column(name="nom", type="string", length=30, nullable=true)
+     * @ORM\Column(name="nom", type="string", length=150, nullable=true)
      */
     private $nom;
 
 	/**
 	 * @var string
 	 *
-     * @ORM\Column(name="prenom", type="string", length=20, nullable=true)
+     * @ORM\Column(name="prenom", type="string", length=50, nullable=true)
      */
     private $prenom;
 
@@ -171,6 +172,16 @@ class User extends BaseUser
 	 * @ORM\OneToMany(targetEntity="Transaction", mappedBy="destinataire", cascade={"persist"})
 	 */
 	private $transactionsReceived;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="Siege", inversedBy="users")
+	 */
+	private $siege;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="Groupe", inversedBy="gestionnaires")
+	 */
+	private $myGroup;
 
     public function __construct()
     {
@@ -738,5 +749,52 @@ class User extends BaseUser
 		return $this;
 	}
 
+	/**
+	 * @param null|Siege $siege
+	 * @return $this
+	 */
+	public function setSiege(?Siege $siege)
+	{
+		$this->siege = $siege;
+		return $this;
+	}
 
+	/**
+	 * @return null|Siege
+	 */
+	public function getSiege(): ?Siege
+	{
+		return $this->siege;
+	}
+
+	public function isSiege(): bool
+	{
+		return $this->siege != null;
+	}
+
+	/**
+	 * @param null|Groupe $myGroup
+	 * @return $this
+	 */
+	public function setMyGroup(?Groupe $myGroup)
+	{
+		$this->myGroup = $myGroup;
+		return $this;
+	}
+
+	/**
+	 * @return Groupe
+	 */
+	public function getMyGroup(): ?Groupe
+	{
+		return $this->myGroup;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isGestionnaire(): bool
+	{
+		return $this->myGroup != null;
+	}
 }

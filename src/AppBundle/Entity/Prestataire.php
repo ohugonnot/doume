@@ -5,8 +5,10 @@ namespace AppBundle\Entity;
 
 use AppBundle\Entity\EntityTrait\EnablableEntityTrait;
 use AppBundle\Entity\EntityTrait\GeolocEntityTrait;
+use AppBundle\Entity\EntityTrait\HasCompteEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -14,7 +16,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Prestataire
 {
-	use	EnablableEntityTrait, GeolocEntityTrait;
+	use	EnablableEntityTrait,
+		GeolocEntityTrait,
+		HasCompteEntity;
+
+	const UPLOAD_DIR = "prestataire";
 
     /**
 	 * @var int
@@ -40,16 +46,16 @@ class Prestataire
     private $metier;
 
 	/**
-	 * @var string
+	 * @var null|string
 	 *
-	 * @ORM\Column(name="statut", type="string", length=50)
+	 * @ORM\Column(name="statut", type="string", length=50, nullable=true)
      */
     private $statut;
 
 	/**
-	 * @var string
+	 * @var null|string
 	 *
-	 * @ORM\Column(name="responsable", type="string", length=200)
+	 * @ORM\Column(name="responsable", type="string", length=200, nullable=true)
      */
     private $responsable;
 
@@ -68,16 +74,9 @@ class Prestataire
     private $siret;
 
 	/**
-	 * @var string
+	 * @var null|string
 	 *
-	 * @ORM\Column(name="photo", type="string", length=150)
-     */
-    private $photo;
-
-	/**
-	 * @var string
-	 *
-	 * @ORM\Column(name="web", type="string", length=150)
+	 * @ORM\Column(name="web", type="string", length=255, nullable=true)
      */
     private $web;
 
@@ -86,21 +85,22 @@ class Prestataire
 	 *
 	 * @ORM\Column(name="accept", type="boolean", nullable=false)
      */
-    private $accept;
+    private $accept = false;
 
 	/**
 	 * @var bool
 	 *
 	 * @ORM\Column(name="partenaire", type="boolean", nullable=false)
      */
-    private $partenaire;
+    private $partenaire = false;
 
 	/**
-	 * @var float
+	 * @var null|Image
 	 *
-	 * @ORM\Column(name="compte", type="decimal", precision=7, scale=2)
-     */
-    private $compte;
+	 * @Assert\Valid()
+	 * @ORM\OneToOne(targetEntity="Image", cascade={"all"}, orphanRemoval=true, fetch="EAGER")
+	 */
+	private $image;
 
 	/**
 	 * @var User
@@ -190,36 +190,36 @@ class Prestataire
 	}
 
 	/**
-	 * @return string
+	 * @return null|string
 	 */
-	public function getStatut(): string
+	public function getStatut(): ?string
 	{
 		return $this->statut;
 	}
 
 	/**
-	 * @param string $statut
+	 * @param null|string $statut
 	 * @return Prestataire
 	 */
-	public function setStatut(string $statut)
+	public function setStatut(?string $statut)
 	{
 		$this->statut = $statut;
 		return $this;
 	}
 
 	/**
-	 * @return string
+	 * @return null|string
 	 */
-	public function getResponsable(): string
+	public function getResponsable(): ?string
 	{
 		return $this->responsable;
 	}
 
 	/**
-	 * @param string $responsable
+	 * @param null|string $responsable
 	 * @return Prestataire
 	 */
-	public function setResponsable(string $responsable)
+	public function setResponsable(?string $responsable)
 	{
 		$this->responsable = $responsable;
 		return $this;
@@ -262,36 +262,18 @@ class Prestataire
 	}
 
 	/**
-	 * @return string
+	 * @return null|string
 	 */
-	public function getPhoto(): string
-	{
-		return $this->photo;
-	}
-
-	/**
-	 * @param string $photo
-	 * @return Prestataire
-	 */
-	public function setPhoto(string $photo)
-	{
-		$this->photo = $photo;
-		return $this;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getWeb(): string
+	public function getWeb(): ?string
 	{
 		return $this->web;
 	}
 
 	/**
-	 * @param string $web
+	 * @param null|string $web
 	 * @return Prestataire
 	 */
-	public function setWeb(string $web)
+	public function setWeb(?string $web)
 	{
 		$this->web = $web;
 		return $this;
@@ -300,7 +282,7 @@ class Prestataire
 	/**
 	 * @return bool
 	 */
-	public function hasAccept(): bool
+	public function isAccept(): bool
 	{
 		return $this->accept;
 	}
@@ -334,23 +316,23 @@ class Prestataire
 	}
 
 	/**
-	 * @return float
+	 * @return Image|null
 	 */
-	public function getCompte(): float
+	public function getImage(): ?Image
 	{
-		return $this->compte;
+		return $this->image;
 	}
 
 	/**
-	 * @param float $compte
+	 * @param Image|null $image
 	 * @return Prestataire
 	 */
-	public function setCompte(float $compte)
+	public function setImage(?Image $image)
 	{
-		$this->compte = $compte;
+		$image->setType(self::UPLOAD_DIR);
+		$this->image = $image;
 		return $this;
 	}
-
 
 	/**
 	 * @return User
