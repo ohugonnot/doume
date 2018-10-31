@@ -52,10 +52,17 @@ class Comptoir
 	 */
 	protected $user;
 
+	/**
+	 * @var Groupe $comptoirGroup
+	 *
+	 * @ORM\ManyToOne(targetEntity="Groupe", inversedBy="comptoirs")
+	 */
+	private $comptoirGroup;
+
     /**
-     * @return mixed
+     * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -95,5 +102,23 @@ class Comptoir
 		$fichier->setType(self::UPLOAD_DIR);
 		$this->fichier = $fichier;
 		return $this;
+	}
+
+	/**
+	 * @param null|Groupe $comptoirGroup
+	 * @return $this
+	 */
+	public function setComptoirGroup(?Groupe $comptoirGroup)
+	{
+		$this->comptoirGroup = $comptoirGroup;
+		return $this;
+	}
+
+	/**
+	 * @return null|Groupe
+	 */
+	public function getComptoirGroup(): ?Groupe
+	{
+		return $this->comptoirGroup;
 	}
 }

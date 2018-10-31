@@ -1,6 +1,30 @@
 AppBundle\Entity\User:
-    character{1..10}:
+    user{1..30}:
         username: <userName()>
         email: <email()>
         plainPassword: 'test'
         enabled: true
+
+AppBundle\Entity\Prestataire:
+    prestataire{1..15}:
+        raison: <text(10)>
+        metier: <text(10)>
+        iban: <text(10)>
+        siret: <text(10)>
+        user: '@user<current()>'
+
+AppBundle\Entity\Comptoir:
+  comptoir{1..15}:
+    name: <text(10)>
+    user: '@user<current()>'
+
+AppBundle\Entity\Groupe:
+  groupe{1..3}:
+    __construct: [<text(10)>]
+    users: '10x @user*'
+    gestionnaires: '2x @user*'
+    redacteurs: '2x @user*'
+    tresoriers: '1x @user*'
+    contacts: '2x @user*'
+    prestataires: '5x @prestataire*'
+    comptoirs: '5x @comptoir*'

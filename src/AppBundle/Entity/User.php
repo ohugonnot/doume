@@ -72,7 +72,7 @@ class User extends BaseUser
     private $ecompte = 0;
 
     /**
-	 * @var Prestataire
+	 * @var null|Prestataire
 	 *
      * @ORM\OneToOne(targetEntity="Prestataire", cascade={"all"}, orphanRemoval=true, mappedBy="user")
      */
@@ -179,9 +179,26 @@ class User extends BaseUser
 	private $siege;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="Groupe", inversedBy="gestionnaires")
+	 * @ORM\ManyToOne(targetEntity="Groupe", inversedBy="gestionnaires", cascade={"all"})
 	 */
-	private $myGroup;
+	private $gestionnaireGroup;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="Groupe", inversedBy="redacteurs", cascade={"all"})
+	 */
+	private $redacteurGroup;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="Groupe", inversedBy="contacts", cascade={"all"})
+	 */
+	private $contactGroup;
+
+	/**
+	 * @var Groupe $tresorierGroup
+	 *
+	 * @ORM\ManyToOne(targetEntity="Groupe", inversedBy="tresoriers", cascade={"all"})
+	 */
+	private $tresorierGroup;
 
     public function __construct()
     {
@@ -409,21 +426,23 @@ class User extends BaseUser
     }
 
     /**
-     * @return Prestataire
+     * @return null|Prestataire
      */
-    public function getPrestataire(): Prestataire
+    public function getPrestataire(): ?Prestataire
     {
         return $this->prestataire;
     }
 
     /**
-     * @param Prestataire $prestataire
+     * @param null|Prestataire $prestataire
      * @return User
      */
-    public function setPrestataire(Prestataire $prestataire)
+    public function setPrestataire(?Prestataire $prestataire)
     {
         $this->prestataire = $prestataire;
-        $prestataire->setUser($this);
+        if($prestataire) {
+			$prestataire->setUser($this);
+		}
         return $this;
     }
 
@@ -733,6 +752,7 @@ class User extends BaseUser
 	{
 		if (!$this->getGroups()->contains($group)) {
 			$this->getGroups()->add($group);
+			/** @var Groupe $group */
 			$group->addUser($this);
 		}
 
@@ -743,6 +763,7 @@ class User extends BaseUser
 	{
 		if ($this->getGroups()->contains($group)) {
 			$this->getGroups()->removeElement($group);
+			/** @var Groupe $group */
 			$group->removeUser($this);
 		}
 
@@ -773,28 +794,74 @@ class User extends BaseUser
 	}
 
 	/**
-	 * @param null|Groupe $myGroup
+	 * @param null|Groupe $gestionnaireGroup
 	 * @return $this
 	 */
-	public function setMyGroup(?Groupe $myGroup)
+	public function setGestionnaireGroup(?Groupe $gestionnaireGroup)
 	{
-		$this->myGroup = $myGroup;
+		$this->gestionnaireGroup = $gestionnaireGroup;
 		return $this;
 	}
 
 	/**
-	 * @return Groupe
+	 * @return null|Groupe
 	 */
-	public function getMyGroup(): ?Groupe
+	public function getGestionnaireGroup(): ?Groupe
 	{
-		return $this->myGroup;
+		return $this->gestionnaireGroup;
 	}
 
 	/**
-	 * @return bool
+	 * @param null|Groupe $redacteurGroup
+	 * @return $this
 	 */
-	public function isGestionnaire(): bool
+	public function setRedacteurGroup(?Groupe $redacteurGroup)
 	{
-		return $this->myGroup != null;
+		$this->redacteurGroup = $redacteurGroup;
+		return $this;
+	}
+
+	/**
+	 * @return null|Groupe
+	 */
+	public function getRedacteurGroup(): ?Groupe
+	{
+		return $this->redacteurGroup;
+	}
+
+	/**
+	 * @param null|Groupe $contactGroup
+	 * @return $this
+	 */
+	public function setContactGroup(?Groupe $contactGroup)
+	{
+		$this->contactGroup = $contactGroup;
+		return $this;
+	}
+
+	/**
+	 * @return null|Groupe
+	 */
+	public function getContactGroup(): ?Groupe
+	{
+		return $this->contactGroup;
+	}
+
+	/**
+	 * @param null|Groupe $tresorierGroup
+	 * @return $this
+	 */
+	public function setTresorierGroup(?Groupe $tresorierGroup)
+	{
+		$this->tresorierGroup = $tresorierGroup;
+		return $this;
+	}
+
+	/**
+	 * @return null|Groupe
+	 */
+	public function getTresorierGroup(): ?Groupe
+	{
+		return $this->tresorierGroup;
 	}
 }

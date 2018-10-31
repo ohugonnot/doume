@@ -137,6 +137,13 @@ class Prestataire
 	 */
 	private $promos;
 
+	/**
+	 * @var Groupe $prestataireGroup
+	 *
+	 * @ORM\ManyToOne(targetEntity="Groupe", inversedBy="prestataires")
+	 */
+	private $prestataireGroup;
+
     public function __construct()
     {
         $this->rubriques = new ArrayCollection();
@@ -486,5 +493,23 @@ class Prestataire
 			$this->promos->removeElement($promo);
 		}
 		return $this;
+	}
+
+	/**
+	 * @param null|Groupe $prestataireGroup
+	 * @return $this
+	 */
+	public function setPrestataireGroup(?Groupe $prestataireGroup)
+	{
+		$this->prestataireGroup = $prestataireGroup;
+		return $this;
+	}
+
+	/**
+	 * @return null|Groupe
+	 */
+	public function getPrestataireGroup(): ?Groupe
+	{
+		return $this->prestataireGroup;
 	}
 }

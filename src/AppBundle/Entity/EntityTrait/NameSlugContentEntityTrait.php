@@ -37,6 +37,17 @@ trait NameSlugContentEntityTrait
 		return $this->content;
 	}
 
+	public function setDescription(?string $content)
+	{
+		$this->setContent($content);
+		return $this;
+	}
+
+	public function getDescription(): ?string
+	{
+		return $this->getContent();
+	}
+
 	public function setContent(?string $content)
 	{
 		$this->content = $content;
